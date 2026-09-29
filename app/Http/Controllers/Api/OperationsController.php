@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StoreJobResultsRequest;
-use App\Http\Requests\UpdateJobResultsRequest;
-use App\Models\JobResults;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOperationsRequest;
+use App\Http\Requests\UpdateOperationsRequest;
+use App\Models\Operations;
 
-class JobResultsController extends Controller
+class OperationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class JobResultsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreJobResultsRequest $request)
+    public function store(StoreOperationsRequest $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class JobResultsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(JobResults $jobResults)
+    public function show(Operations $operations)
     {
         //
     }
@@ -43,7 +44,7 @@ class JobResultsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(JobResults $jobResults)
+    public function edit(Operations $operations)
     {
         //
     }
@@ -51,7 +52,7 @@ class JobResultsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateJobResultsRequest $request, JobResults $jobResults)
+    public function update(UpdateOperationsRequest $request, Operations $operations)
     {
         //
     }
@@ -59,7 +60,7 @@ class JobResultsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JobResults $jobResults)
+    public function destroy(Operations $operations)
     {
         //
     }
