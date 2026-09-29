@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // 3. Create extra test users
-        $users = User::factory(3)->create();
+        $users = User::factory(5)->create();
         $allUsers = $users->concat([$demoUser]);
 
         $availableOperations = Operations::all();
