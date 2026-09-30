@@ -9,62 +9,44 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Actions\Auth\LoginUser;
+use App\Actions\Auth\LogoutUser;
+use App\Actions\Auth\RegisterUser;
+use App\Http\Resources\UserResource;
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(LoginUser $loginUser, LoginRequest $request)
     {
-        $credentials = $request->validated();
-
-        // 1. Check credentials and create the session automatically
-        if (! Auth::attempt($credentials)) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Invalid email or password.',
-            ], 401);
-        }
-
-        //Regenerate session ID
+        $user = $loginUser->execute(
+            $request->validated()
+        );
         $request->session()->regenerate();
-
-        // 3. Return user data - Laravel automatically sends the 'Set-Cookie' header!
         return response()->json([
-            'status'  => true,
             'message' => 'Login successful!',
-            'user'    => Auth::user(),
+            'user'    => new UserResource($user),
         ]);
+        
     }
 
-    public function logout(Request $request)
+    public function logout(LogoutUser $logoutUser,Request $request)
     {
-        // 1. Log out the user from the web guard
-        Auth::guard('web')->logout();
-
-        // 2. Invalidate the session on the server
-        $request->session()->invalidate();
-
-        // 3. Regenerate CSRF token
-        $request->session()->regenerateToken();
-
+        $logoutUser->execute($request);
         return response()->json([
             'status'  => true,
             'message' => 'Logged out successfully.',
         ]);
-    }
-    public function register(RegisterRequest $request)
-    {
-        $data = $request->validated();
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+    }
+    public function register(RegisterUser $registerUser, RegisterRequest $request)
+    {
+        $user = $registerUser->execute(
+            $request->validated()
+        );
         Auth::login($user);
         $request->session()->regenerate();
         return response()->json([
-            'status'  => true,
             'message' => 'User created successfully!',
-            'data'    => $user,
+            'data'    => new UserResource($user),
         ]);
-    }
+    } 
 }
