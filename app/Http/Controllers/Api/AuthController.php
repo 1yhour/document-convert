@@ -20,7 +20,9 @@ class AuthController extends Controller
         $user = $loginUser->execute(
             $request->validated()
         );
-        $request->session()->regenerate();
+        if($request->hasSession()) {
+            $request->session()->regenerate();
+        }
         return response()->json([
             'message' => 'Login successful!',
             'user'    => new UserResource($user),
@@ -43,7 +45,9 @@ class AuthController extends Controller
             $request->validated()
         );
         Auth::login($user);
-        $request->session()->regenerate();
+        if($request->hasSession()){
+            $request->session()->regenerate();
+        }
         return response()->json([
             'message' => 'User created successfully!',
             'data'    => new UserResource($user),
