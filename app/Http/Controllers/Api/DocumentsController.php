@@ -14,7 +14,7 @@ class DocumentsController extends Controller
      */
     public function index()
     {
-        //
+        return "You are logged ";
     }
 
     /**
