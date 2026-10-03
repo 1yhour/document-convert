@@ -9,7 +9,7 @@ use App\Models\Operations;
 use App\Models\ProcessingJobs;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-
+use App\Models\Post;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Seed supported operations
         $this->call(OperationsSeeder::class);
+        Post::factory(100)->create();
 
         // 2. Create demo user
         $demoUser = User::firstOrCreate(

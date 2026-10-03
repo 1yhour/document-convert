@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-
+use App\Http\Middleware\UserMiddleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Automatically configures EnsureFrontendRequestsAreStateful,
         // session cookies, and CSRF protection for stateful domains
         $middleware->statefulApi();
+        $middleware->alias([
+            "user" => UserMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
