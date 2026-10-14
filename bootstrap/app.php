@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // Automatically configures EnsureFrontendRequestsAreStateful,
         // session cookies, and CSRF protection for stateful domains
         $middleware->statefulApi();
+        $middleware->validateCsrfTokens(except: [
+            '/',
+            'webhooks/*',
+            'api/webhooks/*',
+        ]);
+
         $middleware->alias([
             "user" => UserMiddleware::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
