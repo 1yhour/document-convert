@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Documents;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class DocumentsPolicy
 {
@@ -13,7 +12,7 @@ class DocumentsPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +20,15 @@ class DocumentsPolicy
      */
     public function view(User $user, Documents $documents): bool
     {
-        return false;
+        return $user->id === $documents->user_id;
+    }
+
+    /**
+     * Determine whether the user can download the document.
+     */
+    public function download(User $user, Documents $documents): bool
+    {
+        return $user->id === $documents->user_id;
     }
 
     /**
@@ -29,7 +36,7 @@ class DocumentsPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +44,7 @@ class DocumentsPolicy
      */
     public function update(User $user, Documents $documents): bool
     {
-        return false;
+        return $user->id === $documents->user_id;
     }
 
     /**
@@ -45,22 +52,6 @@ class DocumentsPolicy
      */
     public function delete(User $user, Documents $documents): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Documents $documents): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Documents $documents): bool
-    {
-        return false;
+        return $user->id === $documents->user_id;
     }
 }
