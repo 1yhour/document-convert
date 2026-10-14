@@ -9,7 +9,6 @@ use App\Models\Operations;
 use App\Models\ProcessingJobs;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\Post;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -17,22 +16,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Seed supported operations
-        $this->call(OperationsSeeder::class);
-        Post::factory(100)->create();
+        // 1. Seed roles and permissions
+        $this->call(RolePermissionSeeder::class);
 
-        // 2. Create demo user
+        // 2. Seed supported operations
+        $this->call(OperationsSeeder::class);
+
+        // 3. Create demo user (Admin)
         $demoUser = User::firstOrCreate(
             ['email' => 'demo@example.com'],
             [
                 'name' => 'Demo User',
                 'password' => bcrypt('password'),
+            ],
+        );
+        $demoUser2 = User::firstOrCreate(
+            ['email' => 'admin2@example.com'],
+            [
+                'name' => 'Admin 2',
+                'password' => bcrypt('password'),
             ]
         );
+        $demoUser2->syncRoles(['admin']);
+        $demoUser->syncRoles(['admin']);
 
-        // 3. Create extra test users
+        // 4. Create extra test users (User)
         $users = User::factory(5)->create();
-        $allUsers = $users->concat([$demoUser]);
+
+        foreach ($users as $user) {
+            $user->syncRoles(['user']);
+        }
+        $allUsers = $users->concat([$demoUser, $demoUser2]);
 
         $availableOperations = Operations::all();
 

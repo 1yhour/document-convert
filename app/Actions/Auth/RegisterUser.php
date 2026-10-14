@@ -12,6 +12,9 @@ class RegisterUser
             'email' => $credentials['email'],
             'password' => Hash::make($credentials['password']),
         ]);
+
+        $user->assignRole('user');
+
         return $user;
     }
 }

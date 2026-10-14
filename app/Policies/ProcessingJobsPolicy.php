@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\ProcessingJobs;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ProcessingJobsPolicy
 {
@@ -13,15 +12,23 @@ class ProcessingJobsPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the model (progress).
      */
     public function view(User $user, ProcessingJobs $processingJobs): bool
     {
-        return false;
+        return $user->id === $processingJobs->user_id;
+    }
+
+    /**
+     * Determine whether the user can download the conversion result.
+     */
+    public function download(User $user, ProcessingJobs $processingJobs): bool
+    {
+        return $user->id === $processingJobs->user_id;
     }
 
     /**
@@ -29,7 +36,7 @@ class ProcessingJobsPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +44,7 @@ class ProcessingJobsPolicy
      */
     public function update(User $user, ProcessingJobs $processingJobs): bool
     {
-        return false;
+        return $user->id === $processingJobs->user_id;
     }
 
     /**
@@ -45,22 +52,6 @@ class ProcessingJobsPolicy
      */
     public function delete(User $user, ProcessingJobs $processingJobs): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, ProcessingJobs $processingJobs): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, ProcessingJobs $processingJobs): bool
-    {
-        return false;
+        return $user->id === $processingJobs->user_id;
     }
 }

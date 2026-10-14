@@ -3,65 +3,67 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreDocumentsRequest;
-use App\Http\Requests\UpdateDocumentsRequest;
 use App\Models\Documents;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of documents for the authenticated user.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return "You are logged ";
+        $documents = Documents::where('user_id', auth()->id())->latest()->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $documents,
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the specified document.
      */
-    public function create()
+    public function show(Documents $document): JsonResponse
     {
-        //
+        $this->authorize('view', $document);
+
+        return response()->json([
+            'status' => true,
+            'data' => $document,
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Download the specified document.
      */
-    public function store(StoreDocumentsRequest $request)
+    public function download(Documents $document): JsonResponse
     {
-        //
+        $this->authorize('download', $document);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Download authorized.',
+            'data' => [
+                'document_id' => $document->id,
+                'stored_path' => $document->stored_path,
+            ],
+        ]);
     }
 
     /**
-     * Display the specified resource.
+     * Remove the specified document from storage.
      */
-    public function show(Documents $documents)
+    public function destroy(Documents $document): JsonResponse
     {
-        //
-    }
+        $this->authorize('delete', $document);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Documents $documents)
-    {
-        //
-    }
+        $document->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDocumentsRequest $request, Documents $documents)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Documents $documents)
-    {
-        //
+        return response()->json([
+            'status' => true,
+            'message' => 'Document deleted successfully.',
+        ]);
     }
 }
