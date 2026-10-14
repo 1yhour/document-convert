@@ -35,4 +35,24 @@ return [
         ],
     ],
 
+    'cloudconvert' => [
+        'api_key' => env('CLOUDCONVERT_API_KEY'),
+        'sandbox' => (bool) env('CLOUDCONVERT_SANDBOX', false),
+        'webhook_secret' => env('CLOUDCONVERT_WEBHOOK_SECRET'),
+        'retention_hours' => (int) env('CONVERSION_RETENTION_HOURS', 24),
+        'operations' => [
+            'pdf_to_docx' => [
+                'label' => 'PDF to DOCX',
+                'input_format' => 'pdf',
+                'output_format' => 'docx',
+                'allowed_mime_types' => [
+                    'application/pdf',
+                    'application/x-pdf',
+                ],
+                'allowed_extensions' => ['pdf'],
+                'max_file_size_kb' => (int) env('CLOUDCONVERT_MAX_FILE_SIZE_KB', 10240), // 10 MB in KB
+            ],
+        ],
+    ],
+
 ];

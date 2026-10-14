@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Database\Factories\UserFactory;
@@ -16,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasUuids, HasFactory, Notifiable, HasRoles; // Removed HasMany from here
+    use HasFactory, HasRoles, HasUuids, Notifiable; // Removed HasMany from here
 
     protected function casts(): array
     {
@@ -34,5 +35,10 @@ class User extends Authenticatable
     public function processingJobs(): HasMany
     {
         return $this->hasMany(ProcessingJobs::class, 'user_id');
+    }
+
+    public function conversions(): HasMany
+    {
+        return $this->hasMany(Conversion::class, 'user_id');
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Conversion;
 use App\Models\Documents;
 use App\Models\ProcessingJobs;
+use App\Policies\ConversionPolicy;
 use App\Policies\DocumentsPolicy;
 use App\Policies\ProcessingJobsPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(ProcessingJobs::class, ProcessingJobsPolicy::class);
         Gate::policy(Documents::class, DocumentsPolicy::class);
+        Gate::policy(Conversion::class, ConversionPolicy::class);
     }
 }
